@@ -1,0 +1,1447 @@
+<html>
+<head>
+	<link type="text/css" rel="stylesheet" href="/style-guide/css/fluig-style-guide.min.css"/>
+	<link rel="stylesheet" type="text/css" href="/style-guide/css/fluig-style-guide-filter.min.css">
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/jquery/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/portal/resources/js/mustache/mustache-min.js"></script>
+	<script type="text/javascript" src="/webdesk/vcXMLRPC.js"></script>
+	<script type="text/javascript" src="/style-guide/js/fluig-style-guide.min.js" charmjn="utf-8"></script>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="fluig-style-guide">
+<form name="form" role="form">
+	<input type="hidden" name="hdn_aprovacao" id="hdn_aprovacao"/>
+	<input type="hidden" name="hdn_contabilidade" id="hdn_contabilidade" value='sim'/>
+	<input type="hidden" name="hdn_state" id="hdn_state"/>
+	<input type="hidden" name="hdn_date" id="hdn_date"/>
+	<input type="hidden" name="hdn_valor_inserido" id="hdn_valor_inserido" value=0/>
+	<input type="hidden" name="hdn_sw_pedido" id="hdn_sw_pedido"/>
+	<input type="hidden" name="hdn_sw_lancarM" id="hdn_sw_lancarM"/>
+	<input type="hidden" name="hdn_papel_aprov" id="hdn_papel_aprov"/>
+	<input type="hidden" name="hdn_trava" id="hdn_trava"/>
+	<input type="hidden" name="hd_parcelas" id="hd_parcelas"/>
+	<input type="hidden" name="hd_gerarParcelas" id="hd_gerarParcelas"/>
+	<input type="hidden" name="hd_numProcess" id="hd_numProcess"/>
+	<input type="hidden" name="userAtual" id="userAtual">
+	<input type="hidden" name="trava_obs" id="trava_obs">
+	<input type="hidden" name="prazo" id="prazo" >
+	<input type="hidden" name="hd_avancarAtv" id="hd_avancarAtv"/>
+	
+	<input type="hidden" name="hd_ObjNF" id="hd_ObjNF" >
+
+	<!--Index da pai filho-->
+	<input type="hidden" name="tbccusto_index" id="tbccusto_index">
+	<input type="hidden" name="tbparcelas_index" id="tbparcelas_index">
+
+	<!--Dados para integração-->
+	<input type="hidden" name="chapa" id="chapa">
+	<input type="hidden" name="seqpessoa" id="seqpessoa">
+	<input type="hidden" name="nroempresa" id="nroempresa">
+	<input type="hidden" name="statusIntegracao" id="statusIntegracao">
+	
+	<!--Dados do lançador-->
+	<input type="hidden" name="usercodeLanc" id="usercodeLanc">
+	<input type="hidden" name="chapaLanc" id="chapaLanc">
+	<input type="hidden" name="funcaoLanc" id="funcaoLanc">
+	<input type="hidden" name="nomeLanc" id="nomeLanc">
+	<input type="hidden" name="secaoLanc" id="secaoLanc">
+	<input type="hidden" name="emailLanc" id="emailLanc">
+	<input type="hidden" name="filialLanc" id="filialLanc">
+	<input type="hidden" name="codFilialLanc" id="codFilialLanc">
+	<input type="hidden" name="dataLanc" id="dataLanc">
+	<input type="hidden" name="verificaTrava" id="verificaTrava">
+	<input type="hidden" name="motivoTrava" id="motivoTrava">
+	<!--Aprovadores-->
+	<input type="hidden" name="nivelAprov" id="nivelAprov">
+	<input type="hidden" name="aprovAtual" id="aprovAtual">
+	<input type="hidden" name="contadorAprov" id="contadorAprov">
+	<input type="hidden" name="aprov1" id="aprov1">
+	<input type="hidden" name="aprov2" id="aprov2">
+	<input type="hidden" name="aprov3" id="aprov3">
+	<input type="hidden" name="aprovContabilidade" id="aprovContabilidade">
+	<input type="hidden" name="aprovadoresCC" id="aprovadoresCC">
+	<input type="hidden" name="pacoteiro" id="pacoteiro">
+	<input type="hidden" name="qntAprov" id="qntAprov">
+	<input type="hidden" name="hd_paramsWg" name="hd_paramsWg">
+	<!--token-->
+	<input type="hidden" name="token" id="token">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 class="title" id="title_solic">Solicitação</h1>
+			<h1 class="title" id="title_aprov">Aprovação</h1>
+			<h1 class="title" id="title_revisao">Revisão</h1>
+			<h1 class="title" id="title_compleT">Coplementar Titulo</h1>
+			<h1 class="title" id="title_fim">Fim</h1>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading new-panel">
+			<h2 class="panel-title" style="font-size: 1.4rem;">
+				<!--img-->
+				Pagamento de Notas
+			</h2>
+		</div>
+		<div class="panel-body">
+			<div class="row has-error" style="display: none;" id="div_logErro">
+				<div class="col-md-12">
+					<label for="txta_logError">STATUS DA INTEGRAÇÂO!</label>
+					<textarea id="txta_logError" name="txta_logError" class="form-control" readonly style="height: 150px;"></textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h2 id="title_etapa">Etapa</h2>
+					<div class="progress">
+						<div class="progress-bar progress-bar-warning barra-progress" id="inicio" style="width: 33.33%; display: none;">
+							<span class="spn_etapa">Inicio</span>
+						</div>
+						<div class="progress-bar progress-bar-warning barra-progress" id="aprov" style="width: 33.33%; display: none;">
+							<span class="spn_etapa">Aprovaçâo</span>
+						</div>
+						<div class="progress-bar progress-bar-warning barra-progress" id="revisao" style="width: 33.33%; display: none;">
+							<span class="spn_etapa">Revisão</span>
+						</div>
+						<div class="progress-bar progress-bar-warning barra-progress" id="compleT" style="width: 33.33%; display: none;">
+							<span class="spn_etapa">Complementar titulo</span>
+						</div>
+						<div class="progress-bar progress-bar-warning barra-progress" id="fim" style="width: 33.33%; display: none;">
+							<span class="spn_etapa">FIM</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading new-panel"> 
+			<div class="panel-title" style="font-size: 1.4rem;">
+				<h2>
+					<img src="img/dadosPag.png" alt="dadosPag" class="imgs">
+					Solitação de pagamento
+				</h2>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-3 form-group" id="div_zfornecedor" style="display: none;">
+					<label for="ztxt_solicitacao_fornecedor">Fornecedor</label>
+					<div class="has-success zoom" id="div_ztxt_fornecedor">
+						<!-- <span class="input-group-addon">
+							<i class="flaticon flaticon-company icon-sm"></i>
+						</span> -->
+						<input
+						  type="zoom"
+						  id = "ztxt_solicitacao_fornecedor"
+						  name="ztxt_solicitacao_fornecedor"
+						  data-zoom="{
+						            'displayKey':'FILTRO',
+						            'datasetId':'dts_getFornecedorPagNotas_MFX',
+						            'maximumSelectionLength':'1',
+						            'placeholder':'Selecione o fornecedor',
+						            'fields':[
+						                {
+						                    'field':'FANTASIA',
+						                    'label':'Fornecedor'                                                              
+						                },
+										{
+						                    'field':'CNPJ',
+						                    'label':'CNPJ'                                                              
+						                }
+						                ]
+						        }" 
+						/>
+					</div>
+					<div id="div_txtfornec" style="display: none;" >
+						<input type="text" name="txt_solicitacao_fornecedor" id="txt_solicitacao_fornecedor" readonly class="form-control">
+					</div>
+				</div>
+				
+				<!-- Chamado 1706934 -->
+				<div class="col-md-4 form-group" id="div_zpedido">
+					<label for="ztxt_solicitacao_pedido">Pedido</label>
+					<div class="has-success zoom" id="div_ztxt_pedido">
+						<input
+						  type="zoom"
+						  id = "ztxt_solicitacao_pedido"
+						  name="ztxt_solicitacao_pedido"
+						  data-zoom="{
+						            'displayKey':'FILTRO',
+						            'datasetId':'dts_getPedidosPagNotas_MFX',
+						            'maximumSelectionLength':'1',
+						            'placeholder':'Selecione o pedido',
+						            'fields':[
+										{
+											'field':'ID',
+											'label':'Codigo do Pedido'  
+										},{
+											'field':'FORNECEDOR',
+											'label':'Fornecedor',
+											'standard':'true'  
+										},{
+						                    'field':'DOC',
+						                    'label':'CNPJ/CPF'                                                              
+						                },{
+											'field':'VALORTOTAL',
+						                    'label':'Valor Total'   
+										}
+						                ]
+						        }" 
+						/>
+						<input type="hidden" name="hd_pedidos" id="hd_pedidos" value='false'>
+					</div>
+				</div>
+				<div class="col-md-1 col-style form-group">
+					<label for="sw_solicitacao_pedido" class="el-sw">Possui pedido?</label>
+					<div class="switch switch-success switch-labels el-sw">
+						<input class="switch-input" type="checkbox" id="sw_solicitacao_pedido" name="sw_solicitacao_pedido" onchange="btnswitch(this, 'div_zpedido')"/>
+						<label class="switch-button" for="sw_solicitacao_pedido">Possui pedido?</label>
+					</div>
+				</div>
+				<div class="col-md-3 form-group " id="div_znota">
+					<label for="ztxt_solicitacao_nota">Selecionar nota</label>
+					<div class="has-error zoom" id="div_ztxt_nota">
+						<input
+							type="zoom"
+							id = "ztxt_solicitacao_nota"
+							name="ztxt_solicitacao_nota"
+							data-zoom="{
+							   'displayKey':'FILTRO',
+							   'datasetId':'dts_NFS_MFX',
+							   'maximumSelectionLength':'1',
+							   'placeholder':'Escolha a NF',
+							   'fields':[
+							       {
+							          'field':'NUMERONF',
+							          'label':'Numero da Nota'
+							       },{
+							         'field':'NOTAEMISSAO',
+							         'label':'Data de Emissão',
+							         'standard':'true'
+							       },{
+									 'field':'VALORLIQUIDONFSE',
+									 'label':'Valor Liquido'
+								  	}
+							   	]
+							}"
+						/>
+					</div>
+					<div style="display: none;" id="div_txtnota">
+						<input type="text" name="txt_solicitacao_nota" id="txt_solicitacao_nota" readonly class="form-control">
+					</div>
+				</div>
+				<div class="col-md-4 has-success form-group" id="div_chaveAcesso">
+					<label for="txt_dadosnf_codAcesso">Chave de Acesso</label>
+					<input type="text" name="txt_dadosnf_codAcesso" id="txt_dadosnf_codAcesso" class="form-control" onchange="getChaveAcesso(this.value, this.parentNode)">
+				</div>
+				<div class="col-md-1 col-style form-group">
+					<label for="sw_solicitacao_lancarM" class="el-sw-lm">Lançar manualmente?</label>
+					<div class="switch switch-success switch-labels el-sw">
+						<input class="switch-input" type="checkbox" id="sw_solicitacao_lancarM" name="sw_solicitacao_lancarM" onchange="btnswitch(this, 'div_znota')"/>
+						<label class="switch-button" for="sw_solicitacao_lancarM">Lançar manualmente?</label>
+					</div>
+				</div>
+			</div>
+			<hr class="linha"/>
+			<div class="row">
+				<div class="col-md-2 form-group">
+					<label for="txt_solicitacao_data">Data</label>
+					<input type="text" name	="txt_solicitacao_data" id="txt_solicitacao_data" class="form-control" mask="00/00/0000" readonly>
+				</div>
+				<div class="col-md-4 form-group">
+					<label for="txt_solicitacao_solicitante">Solicitante</label>
+					<input type="text" name	="txt_solicitacao_solicitante" id="txt_solicitacao_solicitante" class="form-control" readonly>
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="txt_solicitacao_secao">Seção</label>
+					<input type="text" name	="txt_solicitacao_secao" id="txt_solicitacao_secao" class="form-control" readonly>
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="txt_solicitacao_email">E-mail</label>
+					<input type="text" name	="txt_solicitacao_email" id="txt_solicitacao_email" class="form-control" readonly>
+				</div>
+				<!--Dados solicitante-->
+				<input type="hidden" name="codfilal" id="codfilal">
+				<input type="hidden" name="filal" id="filal">
+				<input type="hidden" name="hdn_usercode" id="hdn_usercode"/>
+				<input type="hidden" name="hdn_mail" id="hdn_mail"/>
+			</div>
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label for="ztxt_solicitacao_filial">Filial</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon zoom">
+							<i class="flaticon flaticon-store-mall-directory icon-sm"></i>
+						</span> -->
+						<input
+							type="zoom"
+							id = "ztxt_solicitacao_filial"
+							name="ztxt_solicitacao_filial"
+							data-zoom="{
+							    'displayKey':'FILTRO',
+							    'datasetId':'get_empresa_MFX',
+							    'maximumSelectionLength':'1',
+							    'placeholder':'Escolha a Filial',
+							    'fields':[
+							        {
+							           'field':'NROEMPRESA',
+							           'label':'NROEMPRESA'
+							        },{
+							          'field':'NOMEREDUZIDO',
+							          'label':'Nome',
+							          'standard':'true'
+							        },{
+							          'field':'CNPJ',
+							          'label':'CNPJ'
+							        }
+							    ]
+							 }"
+						 />
+					</div>	
+					<input type="hidden" name="docFilial" id="docFilial">
+				</div>
+				<div class="col-md-6 has-error form-group">
+					<label for="txt_solicitacao_tipo">Tipo</label>
+					<input type="text" class="form-control" id="txt_solicitacao_tipo" name="txt_solicitacao_tipo" readonly>
+					<!--<select name="slct_solicitacao_tipo" id="slct_solicitacao_tipo" class="form-control" onchange="validaSelect(this, this.parentNode)" onblur="validaTipo(this.value)">
+						<option value="Selecione">Selecione</option>
+						<option value="loja">Loja</option>
+						<option value="matriz">Matriz</option>
+					</select>
+					<input type="hidden" name="hd_slct_solicitacao_tipo" id="hd_slct_solicitacao_tipo">-->
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading new-panel">
+			 <h2 class="panel-title">
+				<img src="img/dadosFornecedor.png" alt="dadosFornec" class="imgs">
+				Dados do fornecedor
+			</h2>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-2 has-error form-group">
+					<label for="slct_fornec_tipo_pessoa">Tipo de pessoa</label>
+					<select name="slct_fornec_tipo_pessoa" id="slct_fornec_tipo_pessoa" class="form-control" onchange="validaSelect(this, this.parentNode)">
+						<option value="Selecione">Selecione</option>
+						<option value="juridica">Jurídica</option>
+						<option value="fisica">Fisíca</option>
+					</select>
+					<input type="hidden" name="hdn_slct_fornec_tipo_pessoa" id="hdn_slct_fornec_tipo_pessoa"/>
+				</div>
+				<div class="col-md-3 has-error form-group">
+					<label for="txt_fornec_doc">CNPJ/CPF</label>
+					<input type="text" name="txt_fornec_doc" id="txt_fornec_doc" readonly onchange="verificaDoc(this.value)" class="form-control mCnpj validaNF">
+				</div>
+				<div class="col-md-5 form-group">
+					<label for="txt_fornec_fornc">Fornecedor</label>
+					<input type="text" name="txt_fornec_fornc" id="txt_fornec_fornc" class="form-control" readonly>
+				</div>
+				<div class="col-md-2 form-group">
+					<label for="txt_fornec_fornc">SEQPESSOA</label>
+					<input type="text" name="txt_fornec_seqpessoa" id="txt_fornec_seqpessoa" class="form-control" readonly>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-2 form-group">
+					<label for="txt_fornec_endereco">Endereço</label>
+					<input type="text" name="txt_fornec_endereco" id="txt_fornec_endereco" class="form-control" readonly>
+				</div>
+				<div class="col-md-1 form-group">
+					<label for="txt_fornec_numero">Número</label>
+					<input type="text" name="txt_fornec_numero" id="txt_fornec_numero" class="form-control" readonly>
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="txt_fornec_bairro">Bairro</label>
+					<input type="text" name="txt_fornec_bairro" id="txt_fornec_bairro" class="form-control" readonly>	
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="txt_fornec_cidade">Cidade</label>
+					<input type="text" name="txt_fornec_cidade" id="txt_fornec_cidade" class="form-control" readonly>
+				</div>
+				<div class="col-md-3 form-group">
+					<label for="txt_fornec_uf">UF</label>
+					<input type="text" name="txt_fornec_uf" id="txt_fornec_uf" class="form-control" readonly>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading new-panel">
+			 <h2 class="panel-title">
+				<img src="img/dadosNota.png" alt="dadosNF" class="imgs">
+				Dados da Nota
+			</h2>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-md-6 form-group">
+					<label for="ztxt_dadosnf_natureza">Natureza da despesa</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon">
+							<i class="flaticon flaticon-invoices-check icon-sm"></i>
+						</span> -->
+						<input
+							type="zoom"
+							id = "ztxt_dadosnf_natureza"
+							name="ztxt_dadosnf_natureza"
+							data-zoom="{
+							    'displayKey':'FILTRO',
+							    'datasetId':'dts_buscaNatureza_MFX',
+							    'maximumSelectionLength':'1',
+							    'placeholder':'Escolha a Natureza',
+							    'fields':[
+							        {
+							           'field':'CODNATUREZA',
+							           'label':'Codigo Histórico'
+							        },{
+							          'field':'NATUREZA',
+							          'label':'Natureza',
+							          'standard':'true'
+							        },{
+							          'field':'CONTADEBITO',
+							          'label':'Conta Debito'
+							        },{
+										'field':'DESCRICAO',
+										'label':'Descrição'
+									},{
+										'field':'TIPO',
+										'label':'Tipo de Custo'
+									}
+							    ]
+							 }"
+						/>
+							<!--Dados da natureza-->
+							 <input type="hidden" name="codhistorico" id="codhistorico">
+							 <input type="hidden" name="basecalculo" id="basecalculo">
+					</div>
+				</div>
+
+				<div class="col-md-2 has-error form-group">
+					<label for="txt_dadosnf_numeronf">Número da nota</label>
+					<input type="text" name="txt_dadosnf_numeronf" id="txt_dadosnf_numeronf" class="form-control validaNF" onchange="validaInput(this, this.parentNode)" readonly>
+				</div>
+
+				<div class="col-md-2 has-error form-group">
+					<label for="slct_dadosnf_tipopg">Tipo de pagamento</label>
+					<select name="slct_dadosnf_tipopg" id="slct_dadosnf_tipopg" class="form-control" onblur="validaSelect(this, this.parentNode)" onchange="validaTipoPgt(this.value)">
+						<option value="Selecione">Selecione</option>
+						<option value="deposito">Depósito</option>
+						<option value="dinheiro">Dinheiro</option>
+						<option value="boleto">Boleto</option>
+						<option value="BaixaJudicial">Baixa Judicial</option>
+						<option value="DebitoAutomatico">Débito Automático</option>
+						<option value="CartaoPrePago">Cartão Pré Pago</option>
+					</select>
+					<input type="hidden" name="hd_slct_dadosnf_tipopg" id="hd_slct_dadosnf_tipopg">
+				</div>
+
+				<!--<div class="col-md-2 has-error form-group">
+					<label for="slct_dadosnf_guia">Guia de imposto</label>
+					<select name="slct_dadosnf_guia" id="slct_dadosnf_guia" class="form-control" onchange="validaSelect(this, this.parentNode)" onblur='validaGuia(this.value)'>
+						<option value="Selecione">Selecione</option>
+						<option value="sim">Sim</option>
+						<option value="nao">Não</option>
+					</select>
+					<input type="hidden" name="hd_guiaImposto" id="hd_guiaImposto">
+				</div>	-->
+				<div class="col-md-2 has-error form-group">
+					<label for="txt_dadosnf_ccusto">Tipo de custo</label>
+					<input type="text" name="txt_dadosnf_ccusto" id="txt_dadosnf_ccusto"class="form-control" readonly>
+				</div>
+				<!--Dados da nota-->
+				<input type="hidden" name="seqnota" id="seqnota">
+			</div>
+			<div class="row">
+				<div class="col-md-2 form-group">
+					<label for="txt_dadosnf_datavenct">Data Venc.</label>
+					<input type="date" class="form-control" name="txt_dadosnf_datavenct" id="txt_dadosnf_datavenct" onblur="validaInputVenct(this.value, this.id, this, this.parentNode)">
+					<input type="hidden" name="hd_datavenct" id="hd_datavenct">
+					<!-- <div class="input-group has-error" id="div-dateVenct">
+						<button type='button' id='btn-dateVenct' class="input-group-addon" onclick="calendarVenct('txt_dadosnf_datavenct', this.parentNode)" style="cursor: pointer;">
+							<i class="flaticon flaticon-date-range icon-sm"></i>
+						</button>
+						<input type="text" name="txt_dadosnf_datavenct" id="txt_dadosnf_datavenct" mask="00/00/0000" class="form-control" onclick="calendarVenct(this.id, this.parentNode)" onchange="validaInput(this, this.parentNode)" onblur="validaInputVenct(this.value, this.id)" >
+						<input type="hidden" name="hd_datavenct" id="hd_datavenct">
+					</div> -->
+				</div>
+
+				<div class="col-md-2 form-group">
+					<label for="txt_dadosnf_dataemissao">Data de emissão</label>
+					<input type="date" name="txt_dadosnf_dataemissao" id="txt_dadosnf_dataemissao" class="form-control validaNF" onchange="validaDate(this, this.parentNode, this.value)">
+					<input type="hidden" name="hd_dataEmissao" id="hd_dataEmissao">
+					<!-- <div class="input-group has-error" id="div-date">
+						<button type='button' id='btn-dateEmissao' class="input-group-addon" onclick="calendarEmissao('txt_dadosnf_dataemissao', this.parentNode, 'show')" style="cursor: pointer;">
+							<i class="flaticon flaticon-date-range icon-sm"></i>
+						</button>
+						<input type="text" name="txt_dadosnf_dataemissao" id="txt_dadosnf_dataemissao" mask='00/00/0000' class="form-control validaNF" onchange="validaDate(this, this.parentNode, this.value)" readonly>
+						<input type="hidden" name="hd_dataEmissao" id="hd_dataEmissao">
+					</div> -->
+				</div>
+				
+				<div class="col-md-2 form-group">
+					<label for="txt_dadosnf_dataentrada">Data de entrada</label>
+					<input type="date" name="txt_dadosnf_dataentrada" id="txt_dadosnf_dataentrada" class="form-control" onchange="dataEntrada(this.value, this.parentNode)">
+					<input type="hidden" name="hd_dataEntrada" id="hd_dataEntrada">
+
+					<!-- <div class="input-group has-success" id="div-date-entrada">
+						<button type='button' id='btn-dateEntrada' class="input-group-addon" onclick="calendarEntrada('txt_dadosnf_dataentrada', this.parentNode, 'show')" style="cursor: pointer;">
+							<i class="flaticon flaticon-date-range icon-sm"></i>
+						</button>
+						<input type="text" name="txt_dadosnf_dataentrada" id="txt_dadosnf_dataentrada" mask='00/00/0000' class="form-control" onchange="dataEntrada(this.value, this.parentNode)" readonly/>
+						<input type="hidden" name="hd_dataEntrada" id="hd_dataEntrada">
+					</div> -->
+				</div>
+
+				<div class="col-md-2 has-error form-group">
+					<label for="txt_dadosnf_datacompetancia">Mês/ano comp.</label>
+					<input type="text" name="txt_dadosnf_datacompetancia" id="txt_dadosnf_datacompetancia" class="form-control" readonly onchange="validaInput(this, this.parentNode)" onblur="validaDataCompetencia(this.value)" readonly>
+					<input type="hidden" name="hd_datacompetencia" id="hd_datacompetencia">
+				</div>
+
+				<div class="col-md-2 has-error form-group">
+					<label for="txt_dadosnf_valorbruto">Valor bruto NF</label>
+						<input type="text" name="txt_dadosnf_valorbruto" id="txt_dadosnf_valorbruto" class="form-control mValor validaNF"  onchange="formatacampo(this.value, 'moeda', this.id, this, this.parentNode)" readonly>
+				</div>
+				<div class="col-md-2 has-error form-group">
+					<label for="txt_dadosnf_valorliquido">Valor liquido NF</label>
+					<input type="text" name="txt_dadosnf_valorliquido" id="txt_dadosnf_valorliquido" class="form-control mValor"  onchange="formatacampo(this.value, 'moeda', this.id, this, this.parentNode)" onblur='validaVLiquido(this.value, this.id)' readonly>
+				</div>
+			</div>
+			<div class="row" id="divNatureza" style="display: none;">
+				<input type="hidden" name="hd_prazo" id="hd_prazo">
+				<div class="col-md-2">
+					<label for="nroserie">Série</label>
+					<input type="text" id="nroserie" name="nroserie" class="form-control validaNF" onchange="validaInput(this, this.parentNode)">
+				</div>
+				<div class="col-md-1">
+					<label for="especie">Espécie</label>
+					<input type="text" id="especie" name="especie" readonly class="form-control">
+				</div>
+				<div class="col-md-3">
+					<label for="modelo">Modelo</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon">
+							<i class="flaticon flaticon-invoices icon-sm" aria-hidden="true"></i>
+						</span> -->
+						<input
+						  type="zoom"
+						  id = "modelo"
+						  name="modelo"
+						  data-zoom="{
+									'displayKey':'CODMODELO',
+									'datasetId':'dts_getModelo_MFX',
+									'maximumSelectionLength':'1',
+									'placeholder':'Escolha o Modelo',
+									'fields':[
+										{
+											'field':'CODMODELO',
+											'label':'COGIGO'
+										 },{
+										   'field':'DESCRICAO',
+										   'label':'MODELO',
+										   'standard':'true'
+										 }
+										]
+								}" 
+						/>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<label for="contadebito">Conta Débito</label>
+					<input type="text" name="contadebito" id="contadebito" readonly class="form-control">
+				</div>
+				<div class="col-md-2">
+					<label for="contacredito">Conta Crédito</label>
+					<input type="text" name="contacredito" id="contacredito" readonly class="form-control">
+				</div>
+				<div class="col-md-1">
+					<label for="nroplanilha">Nro. Planilha</label>
+					<input type="text" name="nroplanilha" id="nroplanilha" readonly class="form-control">
+				</div>
+				<div class="col-md-1" id="div-baseC">
+					<label for="img_basecalculo">Base de Calculo</label>
+					<img src="" alt="Base de calculo" id="img_basecalculo" style="width: 35px;">
+				</div>
+			</div>
+			<div class="row" id="divMunicipios" style="display: none;">
+				<input type="hidden" id="hd_origem" name="hd_origem">
+				<div class="form-group col-md-2">
+					<label for="tipoCt">Tipo CT-e</label>
+					<input type="text" name="tipoCt" id="tipoCt" class="form-control" readonly>
+				</div>
+				<div class="form-group col-md-2" id="div_estOrigem">
+					<label for="ztxt_estOrig">Estado do Município de Origem</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon">
+							<i class="fluigicon fluigicon-money icon-sm"></i>
+						</span> -->
+						<input
+						  type="zoom"
+						  id = "ztxt_estOrig"
+						  name="ztxt_estOrig"
+						  data-zoom="{
+									'displayKey':'UF',
+									'datasetId':'dts_getEstados_MFX',
+									'maximumSelectionLength':'1',
+									'placeholder':'Selecione o Estado de Origem',
+									'fields':[
+										{
+											'field':'UF',
+											'label':'Estado'                                                              
+										}
+										]
+								}" 
+						/>
+					</div>
+				</div>
+				<div class="form-group col-md-3" id="div_muncipOrigem">
+					<label for="ztxt_municOrig">Município de Origem</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon">
+							<i class="fluigicon fluigicon-money icon-sm"></i>
+						</span> -->
+						<input
+						  type="zoom"
+						  id = "ztxt_municOrig"
+						  name="ztxt_municOrig"
+						  data-zoom="{
+								'displayKey':'FILTRO',
+								'datasetId':'dts_getMunicipiosPagNotas_MFX',
+								'maximumSelectionLength':'1',
+								'placeholder':'Selecione o Município de Destino',
+								'fields':[
+									{
+										'field':'CODIGO',
+										'label':'Codigo'                                                              
+									},{
+										'field':'CIDADE',
+										'label':'Cidade'                                                              
+									}
+									]
+							}" 
+						/>
+					</div>
+				</div>
+				<div class="form-group col-md-2" id="div_estDest">
+					<label for="ztxt_estDenst">Estado do Município de Destino</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon">
+							<i class="fluigicon fluigicon-money icon-sm"></i>
+						</span> -->
+						<input
+						  type="zoom"
+						  id = "ztxt_estDenst"
+						  name="ztxt_estDenst"
+						  data-zoom="{
+									'displayKey':'UF',
+									'datasetId':'dts_getEstados_MFX',
+									'maximumSelectionLength':'1',
+									'placeholder':'Selecione o Estado de Destino',
+									'fields':[
+										{
+											'field':'UF',
+											'label':'Estado'                                                              
+										}
+										]
+								}" 
+						/>
+					</div>
+				</div>
+				<div class="form-group col-md-3" id="div_muncipDest">
+					<label for="ztxt_municDenst">Município de Destino</label>
+					<div class="has-error zoom">
+						<!-- <span class="input-group-addon">
+							<i class="fluigicon fluigicon-money icon-sm"></i>
+						</span> -->
+						<input
+						  type="zoom"
+						  id = "ztxt_municDenst"
+						  name="ztxt_municDenst"
+						  data-zoom="{
+									'displayKey':'FILTRO',
+									'datasetId':'dts_getMunicipiosPagNotas_MFX',
+									'maximumSelectionLength':'1',
+									'placeholder':'Selecione o Município de Destino',
+									'fields':[
+										{
+											'field':'CODIGO',
+											'label':'Codigo'                                                              
+										},{
+											'field':'CIDADE',
+											'label':'Cidade'                                                              
+										}
+										]
+								}" 
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default" id="panel-banco" style="display: none;">
+		<div class="panel-heading new-panel">
+			 <h2 class="panel-title">
+				<img src="img/dadosBancarios.png" alt="dadosBancarios" class="imgs">
+				Dados Bancarios
+			</h2>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-4 has-error">
+					<label for="txt_dadosb_banco">Banco</label>
+					<input type="text" name="txt_dadosb_banco" id="txt_dadosb_banco" class="form-control" onchange="validaInput(this, this.parentNode)">
+				</div>
+				<div class="form-group col-md-4 has-error">
+					<label for="txt_dadosb_agencia">Agência</label>
+					<input type="text" name="txt_dadosb_agencia" id="txt_dadosb_agencia" class="form-control" onchange="validaInput(this, this.parentNode)">
+				</div>
+				<div class="form-group col-md-4 has-error">
+					<label for="txt_dadosb_conta">Conta</label>
+					<input type="text" name="txt_dadosb_conta" id="txt_dadosb_conta" class="form-control" onchange="validaInput(this, this.parentNode)">
+				</div>
+			</div>
+		</div>
+	</div>		
+	<div class="panel panel-default">
+		<div class="panel-heading new-panel">
+			<h2 class="panel-title">
+			   <img src="img/centroCusto.png" alt="centroCusto" class="imgs">
+			  Centro de Custo
+		   </h2>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="form-group col-md-4 has-error">
+					<label for="txt_ccusto_valornf">Valor total NF</label>
+					<input type="text" name="txt_ccusto_valornf" id="txt_ccusto_valornf" class="form-control" readonly>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="txt_ccusto_valorrest">Valor restante</label>
+					<input type="text" name="txt_ccusto_valorrest" id="txt_ccusto_valorrest" class="form-control" readonly value=0>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="txt_ccusto_valorinserido">Total inserido</label>
+					<input type="text" name="txt_ccusto_valorinserido" id="txt_ccusto_valorinserido" class="form-control" readonly value=0>
+				</div>
+				<div class="form-group col-md-3" id="field_balance" style="display: none;">
+					<label for="txt_ccusto_saldo">Saldo</label>
+					<input type="text" name="txt_ccusto_saldo" id="txt_ccusto_saldo" class="form-control" readonly value=0>
+				</div>
+			</div>
+			<div id="div_cc_paifilho">
+				<div class="row">
+					<div class="form-group col-md-2 col-btn">
+						<label for="btn_ccusto_upload" style="text-align: center;">Importar planilha</label>
+						<div class="el">
+							<button type="button" class="btn btn-upload" id="btn_ccusto_upload" name="btn_ccusto_upload" onclick="$('#fileCSV').click()"><span class="fs-color-white">Upload</span></button>
+							<input style="display: none;" name="fileCSV" type='file' id='fileCSV' onchange='pegaCSV(this)'>
+							<img src="img/excel-icon.png" alt="exel-icon">
+						</div>
+					</div>
+					<div class="form-group col-md-2 col-btn">
+						<label for="" style="text-align: center;">Baixar modelo de planilha</label> 
+						<div class="el">
+							<button type="button" class="btn btn-download" id="btn_ccusto_download" name="btn_ccusto_download" onclick="$('#aplanilha')[0].click()">
+								<i class="flaticon flaticon-download icon-md" aria-hidden="true" style="color: #fff;"></i>
+							</button>
+							<a href="download/Modelo Planilha.csv" download="aplanilha" id="aplanilha" style="display: none;"></a>
+						</div>
+					</div>
+					<div class="form-group col-md-1 col-sw" id="div_swCCA">
+						<label for="sw_ccusto_aprovador" class="el-sw">Rateio Exceção?</label>
+							<div class="switch switch-success switch-labels el-sw">
+								<input class="switch-input" type="checkbox" id="sw_ccusto_aprovador" name="sw_ccusto_aprovador" onchange="btnswitch(this)"/>
+								<label class="switch-button" for="sw_ccusto_aprovador">Rateio Exceção?</label>
+							</div>
+					</div>
+					<div class='form-group col-md-3' id="div_inputCCA" style="display: none;">
+						<label for="ztxt_ccusto_ccaprov">Centro de custo aprovador</label>
+						<div class="has-success zoom">
+							<!-- <span class="input-group-addon">
+								<i class="fluigicon fluigicon-money icon-sm"></i>
+							</span> -->
+							
+							<input
+							  type="zoom"
+							  id = "ztxt_ccusto_ccaprov"
+							  name="ztxt_ccusto_ccaprov"
+							  data-zoom="{
+										'displayKey':'CENTROCUSTO',
+										'datasetId':'dts_getHierarquiaPagNotas_MFX',
+										'maximumSelectionLength':'1',
+										'placeholder':'Selecione o centro de custo do aprovador',
+										'fields':[
+											{
+												'field':'CENTROCUSTO',
+												'label':'Centro de custo'                                                              
+											}
+											]
+									}" 
+							/>
+						</div>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="txtz_ccusto_tipolancamento">Tipo de Lançamento</label>
+						<div class="has-success zoom">
+							<!-- <span class="input-group-addon">
+								<i class="flaticon flaticon-form-list icon-sm"></i>
+							</span> -->
+							<input
+								  type="zoom"
+								  id = "txtz_ccusto_tipolancamento"
+								  name="txtz_ccusto_tipolancamento"
+								  data-zoom="{
+								            'displayKey':'txt_desc',
+								            'datasetId':'Cadastro Tipo de Lançamento',
+								            'maximumSelectionLength':'1',
+								            'placeholder':'Selecione o solicitante',
+								            'fields':[
+								                {
+								                    'field':'txt_desc',
+								                    'label':'Tipo de Lançamento'                                                              
+								                }
+								                ]
+								        }" 
+								/>
+						</div>
+					</div>
+				</div>
+				<div class="row div_cc_border">
+					<div class="form-group col-md-12 col-paifilho">
+						<table class="table table-hover" id="tbccusto" tablename="tbccusto" noaddbutton="true" nodeletebutton="true">
+							<thead>
+								<tr>
+									<td></td>
+									<td>Descrição do Serviço</td>
+									<td>Valor</td>
+									<td style="width: 60%;">Centro de Custo</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><i class="flaticon flaticon-trash icon-xl btn-trash" id="img_ccusto_trash" onclick="delet(this, 'tbcusto')" style="cursor:pointer"></i></td>
+									<td class="td-table"><input type="text" name="txt_ccusto_desc" id="txt_ccusto_desc" class="form-control"></td>
+									<td class="td-table"><input type="text" name="txt_ccusto_valor" id="txt_ccusto_valor" class="form-control mValor" onchange="verificaValorNF(this.value, this)">
+										<input type="hidden" name="hdn_parcelas_valor" id="hdn_parcelas_valor" value=0/>
+									</td>
+									<td style="width: 60%;">
+										<div class="has-error zoom">
+											<!-- <span class="input-group-addon">
+												<i class="fluigicon fluigicon-money icon-sm"></i>
+											</span> -->
+											<input
+											    type="zoom"
+											    id = "txtz_ccusto_cc"
+											    name="txtz_ccusto_cc"
+											    data-zoom="{
+											        'displayKey':'FILTRO',
+											        'datasetId':'dts_CCustoPagNotas_MFX',
+											        'maximumSelectionLength':'1',
+											        'placeholder':'Escolha o Centro de Custo',
+											        'fields':[
+											            {
+											               'field':'CENTROCUSTO',
+											               'label':'Cod Centro de Custo'
+											            },{
+											              'field':'DESCRICAO',
+											              'label':'Centro de Custo',
+											              'standard':'true'
+											            }
+											        ]
+											     }"
+											/>
+											<input type="hidden" name="hdn_codcusto" id="hdn_codcusto">
+										</div>
+									</td>
+								</tr>
+							</tbody>
+							<footer class="foo-btns">
+								<button type="button" class="btn btn-novo" id="btn_ccusto_novo" name="btn_ccusto_novo" onclick="novo()"><span class="fs-color-white">Novo</span></button>
+								<button type="button" class="btn btn-limpar" id="btn_ccusto_limpar" name="btn_ccusto_limpar" onclick="limpa_pai_filho('tbcusto')"><span class="fs-color-white">Limpar rateio</span></button>
+							</footer>
+						</table>
+					</div>
+				</div>
+			</div>
+				<div class="row" id="div_swparcelas">
+					<div class="form-group col-md-12 col-sw">
+						<label for="sw_ccusto_parcelas" class="el-sw">Adicionar parcelas?</label>
+						<div class="switch switch-success switch-labels el-sw">
+							<input class="switch-input" type="checkbox" id="sw_ccusto_parcelas" name="sw_ccusto_parcelas" onchange="btnswitch(this)"/>
+							<label class="switch-button" for="sw_ccusto_parcelas">Adicionar parcelas?</label>
+						</div>
+					</div>
+				</div>
+				<div id="div_parcelas" class="div_parcelas_border">
+					<div id="div_valornf">
+						<div class="row">
+							<div class="form-group col-md-3"></div>
+							<div class="form-group col-md-2">
+								<label for="txt_parcelas_valornf">Valor Liquido NF</label>
+								<input type="text" name="txt_parcelas_valornf" id="txt_parcelas_valornf" class="form-control" readonly>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_parcelas_valorrest">Valor restante</label>
+								<input type="text" name="txt_parcelas_valorrest" id="txt_parcelas_valorrest" class="form-control" readonly>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_parcelas_valorinserido">Total inserido</label>
+								<input type="text" name="txt_parcelas_valorinserido" id="txt_parcelas_valorinserido" class="form-control" readonly>
+							</div>
+							<div class="form-group col-md-3"></div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-3"></div>
+							<div class="form-group col-md-2 has-error">
+								<label for="txt_parcelas_qntparcelas">Quantidade de parcelas</label>
+								<input type="number" name="txt_parcelas_qntparcelas" id="txt_parcelas_qntparcelas" class="form-control validaParcelas" min="1">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_parcelas_vencimentoinicial">Vencimento inicial</label>
+								<div class="input-group has-success" id="div-dateVenctP">
+									<button type='button' id='btn-dataVenctP' class="input-group-addon">
+										<i class="flaticon flaticon-date-range icon-sm"></i>
+									</button>
+									<input type="text" name="txt_parcelas_vencimentoinicial" id="txt_parcelas_vencimentoinicial" class="form-control validaParcelas" mask="00/00/0000" readonly>
+									<input type="hidden" name="hd_venctInicial" id="hd_venctInicial">
+								</div>
+							</div>
+							<div class="form-group col-md-2 col-btn">
+								<button type="button" class="btn btn-parcelas" id="btn_parcelas_gerar" name="btn_parcelas_gerar" onclick="gerarParcelas()"><span class="fs-color-white">Gerar parcelas</span></button>
+							</div>
+							<div class="form-group col-md-3"></div>
+						</div>
+					</div>
+					<div class="row div_calculo">
+						<div class="form-group col-md-12 col-paifilho">
+							<table class="table table-hover" id="tbparcelas" tablename="tbparcelas" noaddbutton="true" nodeletebutton="true">
+								<thead>
+									<tr>
+										<td class="btn-edit"></td>
+										<td>Valor</td>
+										<td>Percentual</td>
+										<td>Vencimento</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td style="padding: 20px 15px;" class="btn-edit"><span onclick="edit(this)" class='has-success' style="cursor:pointer" id="btn_parcelas_edit"><i class="fluigicon fluigicon-pencil icon-md"></i></span></td>
+										<td><input type="text" name="txt_parcelas_valor" class="form-control mValor editParcela" id="txt_parcelas_valor" onchange="formatacampo(this.value, 'moeda', this.id)">
+											<input type="hidden" name="hd_parcelas_valor" id="hd_parcelas_valor">
+										</td>
+										<td><input type="text" name="txt_parcelas_percentual" id="txt_parcelas_percentual" class="form-control" readonly></td>
+										<td><input type="text" name="txt_parcelas_vencimento" id="txt_parcelas_vencimento" class="form-control"  onclick="calendar(this.id)" onchange="validaParcela(this.value, this.id)">
+										<input type="hidden" name="hd_vencimento" id="hd_vencimento">
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+						</div>
+						<div class="col-md-1">
+							<button type="button" class="btn btn-limpar" id="btn_parcelas_limpar" name="btn_parcelas_limpar" onclick="limpa_pai_filho('tbparcelas', 'btn')"><span class="fs-color-white">Limpar tabela</span></button>
+							<input type="hidden" name="hdn_valorparcela_inicial" id="hdn_valorparcela_inicial"/>
+						</div>
+						<div class="col-md-1"></div>
+						<div class="col-md-1">
+							<!-- <img src="img/calculadora.png" id='img_calcula' alt="calculadora"> -->
+							<button type="button" class="btn btn-recalcular" id="btn_parcelas_recalcular" name="btn_parcelas_recalcular" onclick="recalcular()"><span class="fs-color-white">Recalcular</span></button>
+						</div>
+					</div>
+				</div>
+				<div id="obs_pag">
+					<div class="row">
+						<div class="form-group col-md-12">
+							<h3>Detalhar natureza da despesa</h3>
+							<textarea name="txta_parcelas_obs" id="txta_parcelas_obs" class="form-control" maxlength="250"></textarea>
+						</div>
+					</div>
+				</div>
+				<div id="div_aprovações">
+					<div class="panel panel-default">
+						<div class="panel-heading new-panel">
+							<h2 class="panel-title">
+							   <img src="img/aprovadores.png" alt="aprovadores" class="imgs">
+							  Aprovações
+						   </h2>
+						</div>
+						<div class="panel-body">
+							<table class="table table-hover" id="tbaprovacoes" tablename="tbaprovacoes" noaddbutton="true" nodeletebutton="true">
+								<thead>
+									<tr>
+										<th></th>
+										<th></th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input id="labelAprov" type="text" name="labelAprov" class="form-control" readonly style="text-shadow: 0 0 black;"></input></td>
+										<td><img src="img/basecalculo_true.png" id="img_aprov" alt="status" style="width: 35px;"></td>
+										<td><input type="hidden" name="hd_user" id="hd_user"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div id="div_aprovacao">
+					<div class="row">
+						<div class="form-group col-md-4 col-btn-aprov">
+							<label for=".btn_aprov">Aprovar pagamento?<span style="color: red;">(*)</span></label>
+							<div class="btn_aprov">
+								<button type="button" class="btn btn-sim" id="btn_aprovacao_sim" name="btn_aprovacao_sim" onclick="btnAprov('Aprovacao')"><span class="fs-color-white">Aprovar</span></button>
+								<button type="button" class="btn btn-revisao" id="btn_aprovacao_revisao" name="btn_aprovacao_revisao" onclick="btnReprov('Aprovacao')"><span class="fs-color-white">Revisar</span></button>
+							</div>
+						</div>
+						<div class="form-group col-md-8 has-success">
+							<label for="txta_aprovacao_obs">Observações</label>
+							<textarea name="txta_aprovacao_obs" id="txta_aprovacao_obs" class="form-control input-obs" onchange="validaOBS(this.value, this.parentNode)"></textarea>
+							<textarea name="hdn_obs" id="hdn_obs" class="form-control" style="display: none;"></textarea>
+						</div>
+					</div>
+					<div class="row" id="targa_aprovacao_sim">
+						<div class="form-group col-md-12">
+							<p class="bg-success targa">
+								<b>A solicitação foi marcada como aprovada!</b>
+							</p>
+						</div>
+					</div>
+					<div class="row" id="targa_aprovacao_nao">
+						<div class="form-group col-md-12">
+							<p class="bg-danger targa">
+								<b>A solicitação será encaminhada para revisão!</b>
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default" id="div_impostos">
+					<div class="panel-heading new-panel">
+						<h2 class="panel-title">
+						  <img src="img/Impostos.png" alt="impostos" class="imgs">
+						   Impostos
+					   </h2>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxicms" class="el-sw">ICMS</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxicms" name="checkboxicms" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxicms">ICMS</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseicms">Base ICMS</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseicms" id="txt_baseicms" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseicms', this.parentNode, this.value)" id="spanicms">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqicms">Aliq ICMS</label>
+								<input type="text" name="txt_aliqicms" id="txt_aliqicms" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valoricms">Valor ICMS</label>
+								<input type="text" name="txt_valoricms" id="txt_valoricms" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_isentoicms">Isento ICMS</label>
+								<input type="text" name="txt_isentoicms" id="txt_isentoicms" class="form-control" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_outrosicms">Outros ICMS</label>
+								<input type="text" name="txt_outrosicms" id="txt_outrosicms" class="form-control" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxipi" class="el-sw">IPI</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxipi" name="checkboxipi" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxipi">IPI</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseipi">Base IPI</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseipi" id="txt_baseipi" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseipi', this.parentNode, this.value)"  id="spanipi">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqipi">Aliq IPI</label>
+								<input type="text" name="txt_aliqipi" id="txt_aliqipi" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valoripi">Valor IPI</label>
+								<input type="text" name="txt_valoripi" id="txt_valoripi" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_isentoipi">Isento IPI</label>
+								<input type="text" name="txt_isentoipi" id="txt_isentoipi" class="form-control" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_outrosipi">Outros IPI</label>
+								<input type="text" name="txt_outrosipi" id="txt_outrosipi" class="form-control" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxiss" class="el-sw">ISS</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxiss" name="checkboxiss" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxiss">ISS</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseiss">Base ISS</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseiss" id="txt_baseiss" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseiss', this.parentNode, this.value)" id="spaniss">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqiss">Aliq ISS</label>
+								<input type="text" name="txt_aliqiss" id="txt_aliqiss" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valoriss">Valor ISS</label>
+								<input type="text" name="txt_valoriss" id="txt_valoriss" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxpis" class="el-sw">PIS</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxpis" name="checkboxpis" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxpis">PIS</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_basepis">Base PIS</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_basepis" id="txt_basepis" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_basepis', this.parentNode, this.value)" id="spanpis">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqpis">Aliq PIS</label>
+								<input type="text" name="txt_aliqpis" id="txt_aliqpis" class="form-control" onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorpis">Valor PIS</label>
+								<input type="text" name="txt_valorpis" id="txt_valorpis" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)"> 
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxcofins" class="el-sw">COFINS</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxcofins" name="checkboxcofins" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxcofins">COFINS</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_basecofins">Base COFINS</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_basecofins" id="txt_basecofins" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)"> 
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_basecofins', this.parentNode, this.value)" id="spancofins">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqcofins">Aliq COFINS</label>
+								<input type="text" name="txt_aliqcofins" id="txt_aliqcofins" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorcofins">Valor COFINS</label>
+								<input type="text" name="txt_valorcofins" id="txt_valorcofins" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxcsll" class="el-sw">CSLL</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxcsll" name="checkboxcsll" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxcsll">CSLL</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_basecsll">Base CSLL</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_basecsll" id="txt_basecsll" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_basecsll', this.parentNode, this.value)" id="spancsll">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqcsll">Aliq CSLL</label>
+								<input type="text" name="txt_aliqcsll" id="txt_aliqcsll" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorcsll">Valor CSLL</label>
+								<input type="text" name="txt_valorcsll" id="txt_valorcsll" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxirrfJ" class="el-sw">IRRF JURÍDICA</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxirrfJ" name="checkboxirrfJ" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxirrfJ">IRRF JURÍDICA</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseirrfJ">Base IRRF JURÍDICA</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseirrfJ" id="txt_baseirrfJ" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseirrfJ', this.parentNode, this.value)" id="spanirrfJ">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqirrfJ">Aliq IRRF JURÍDICA</label>
+								<input type="text" name="txt_aliqirrfJ" id="txt_aliqirrfJ" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorirrfJ">Valor IRRF JURÍDICA</label>
+								<input type="text" name="txt_valorirrfJ" id="txt_valorirrfJ" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxirrfF" class="el-sw">IRRF FÍSICA</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxirrfF" name="checkboxirrfF" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxirrfF">IRRF FÍSICA</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseirrfF">Base IRRF FÍSICA</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseirrfF" id="txt_baseirrfF" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseirrfF', this.parentNode, this.value)" id="spanirrfF">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqirrfF">Aliq IRRF FÍSICA</label>
+								<input type="text" name="txt_aliqirrfF" id="txt_aliqirrfF" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorirrfF">Valor IRRF FÍSICA</label>
+								<input type="text" name="txt_valorirrfF" id="txt_valorirrfF" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxinssF" class="el-sw">INSS FÍSICA</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxinssF" name="checkboxinssF" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxinssF">INSS FÍSICA</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseinssF">Base INSS FÍSICA</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseinssF" id="txt_baseinssF" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseinssF', this.parentNode, this.value)" id="spaninssF">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqinssF">Aliq INSS FÍSICA</label>
+								<input type="text" name="txt_aliqinssF" id="txt_aliqinssF" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorinssF">Valor INSS FÍSICA</label>
+								<input type="text" name="txt_valorinssF" id="txt_valorinssF" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-2 col-sw">
+								<label for="checkboxinssJ" class="el-sw">INSS JURÍDICA</label>
+								<div class="switch switch-success switch-labels el-sw">
+									<input class="switch-input sw-impostos" type="checkbox" id="checkboxinssJ" name="checkboxinssJ" onclick="checkImpostos(this.checked, this.id)" disabled="disabled"/>
+									<label class="switch-button" for="checkboxinssJ">INSS JURÍDICA</label>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_baseinssJ">Base INSS JURÍDICA</label>
+								<div class="input-group has-info">
+									<input type="text" name="txt_baseinssJ" id="txt_baseinssJ" class="form-control" readonly onchange="valorBase(this.value, this.id)" onblur="editBase(this.id, this.parentNode, this.value)">
+									<span class="input-group-addon" style="cursor: pointer;" onclick="editBase('txt_baseinssJ', this.parentNode, this.value)" id="spaninssJ">
+										<i class="flaticon flaticon-edit-square icon-sm" aria-hidden="true"></i>
+									</span>
+								</div>
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_aliqinssJ">Aliq INSS JURÍDICA</label>
+								<input type="text" name="txt_aliqinssJ" id="txt_aliqinssJ" class="form-control" onchange="formatacampo(this.value, 'moeda', this.id)"> 
+							</div>
+							<div class="form-group col-md-2">
+								<label for="txt_valorinssJ">Valor INSS JURÍDICA</label>
+								<input type="text" name="txt_valorinssJ" id="txt_valorinssJ" class="form-control mValor" readonly onblur="calculaImposto(this)" onchange="formatacampo(this.value, 'moeda', this.id)">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+							<div class="form-group col-md-2">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-4">
+								<label for="txt_valordeducao">Valor Deduções</label>
+								<!-- onchange="recalculaValor(this.value)"  add no input -->
+								<input type="text" name="txt_valordeducao" id="txt_valordeducao" class="form-control" readonly >
+								<textarea name="hd_impostos" id='hd_impostos' style="display: none;"></textarea>
+							</div>
+						</div>
+						<div class="row" id="div_impostos_obs">
+							<div class="form-group col-md-4 col-btn-aprov">
+								<label for=".btn_aprov">Revisar pagamento?</span></label>
+								<div class="btn_aprov">
+									<!--<button type="button" class="btn btn-sim" id="btn_impostos_sim" name="btn_impostos_sim" onclick="btnAprov('Contabilidade')"><span class="fs-color-white">Aprovar</span></button>-->
+									<button type="button" class="btn btn-revisao-cont" id="btn_impostos_revisao" name="btn_impostos_revisao" onclick="btnReprov('Contabilidade')"><span class="fs-color-white">Revisar</span></button>
+								</div>
+							</div>
+							<div class="form-group col-md-8">
+								<label for="txta_impostos_obs">Observações Fiscal/Financeira</label>
+								<textarea name="txta_impostos_obs" id="txta_impostos_obs" class="form-control input-obs" style="height: 100px;"></textarea>
+							</div>
+						</div>
+						<div class="row" id="targa_impostos_sim">
+							<div class="form-group col-md-12">
+								<p class="bg-success targa">
+									<b>A solicitação foi marcada como aprovada!</b>
+								</p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-12">
+								<p class="bg-danger targa" id="targa_impostos_nao">
+									<b>A solicitação será encaminhada para revisão!</b>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="obs_fiscal">
+					<div class="row">
+						<div class="form-group col-md-12">
+							<h3>Observações Fiscal</h3>
+							<textarea name="txta_obs_fiscal" id="txta_obs_fiscal" class="form-control" style="height: 100px;"></textarea>
+						</div>
+					</div>
+				</div>
+				<div id="obs_aprovadores">
+					<div class="row">
+						<div class="form-group col-md-12">
+							<h3>Observações dos Aprovadores</h3>
+							<textarea name="txta_obs_aprovadores" id="txta_obs_aprovadores" class="form-control input-obs" style="height: 300px !important;" readonly></textarea>
+						</div>
+					</div>
+				</div>
+
+			<div id="fundo-alert" style="display: none;"></div>
+		<div id="fundo-alert-2" style="display: none;">
+			<div class="alert alert-warning" role="alert" id="div-alert" style="width: 700px;">
+				<h3 style="text-align: center;">NF Duplicada!</h3>
+				<div class='row'>
+					<div class="col-md-4 col-style">
+						<label for="numeroNF">Numero da NF</label>
+						<span id='numeroNF'></span>
+					</div>
+					<div class="col-md-4 col-style">
+						<label for="docFornec">Fornecedor</label>
+						<span id='docFornec'></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-style">
+						<label for="valorBruto">Valor</label>
+						<span id='valorBruto'></span>
+					</div>
+					<div class="col-md-3 col-style">
+						<label for="dataEmissao">Data de Emissão</label>
+						<span id='dataEmissao'></span>
+					</div>
+					<div class="col-md-3 col-style">
+						<label for="serie">Serie</label>
+						<span id='serie'></span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12 col-btn">
+						<button class="btn btn-info" onclick="acessarSolic(this.value)" value='' id='btn_numprocess'>Acessar solicitação dessa NF</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<div id="fundo-alert-3" style="display: none;">
+			<div class="alert alert-danger" role="alert" id="div-alert3">
+				O Usuario logado não tem permissão de gerar solicitações pois possui o cargo de aprovador ou gerente 
+			</div>
+		</div>-->
+	</div>
+	
+	<div id="divloading" style="display: none;">
+		<img src="img/Oba-loading.gif" alt="loading..." id="loading">
+	</div>
+</form>
+</div>
+</body>
+<script type="text/javascript" src="js/main.js" defer></script>
+<script type="text/javascript" src="js/mask.js"></script>
+<script type="text/javascript" src="js/validaDoc.js"></script>
+<script src="/style-guide/js/fluig-style-guide-filter.min.js"></script>
+</html>

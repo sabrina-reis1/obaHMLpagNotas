@@ -1,0 +1,336 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.fluig-style-guide{
+    font-family: 'Inter', sans-serif !important;
+}
+select{
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%) !important;
+}
+
+input.form-control{
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%) !important;
+}
+
+textarea{
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%) !important;
+    border-radius: 14px !important;
+    border: 1px solid #46C243 !important;
+}
+label{
+    color: #000 !important;
+}
+div.input-group.zoom{
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%) !important;
+}
+span.input-group-addon{
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%) !important;
+}
+.error{
+    color: #CB3D3D !important;
+}
+.row-style{
+    display: flex;
+    align-items: center;
+}
+.col-style{
+    display: flex;
+    flex-direction: column;
+}
+.row-form{
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    justify-content: center;
+}
+.el-sw{
+    display: flex !important;
+    justify-content: center !important;
+    font-size: 12px;
+}
+.el-sw-lm{
+    display: flex !important;
+    justify-content: center !important;
+    font-size: 12px;
+    text-align: center;
+}
+.btn-upload{
+    background-color: #41873E;
+    margin-right: 40px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+.btn-download{
+    background-color: #41873E;
+}
+.col-btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.el{
+    display: flex;
+    justify-content: center;
+}
+.col-sw{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.div_cc_border{
+    border: 1px solid rgb(21, 136, 63);
+    border-radius: 10px;
+}
+.div_parcelas_border{
+    border: 1px solid rgb(21, 136, 63);
+    border-radius: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.btn-novo{
+    background-color: #1BA1E2;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+.btn-limpar{
+    background-color: #A9A9A9;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+
+.img-trash{
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+.row-titulo{
+    margin-top: 40px;
+}
+.col-paifilho{
+    display: flex;
+    flex-direction: column-reverse;
+    padding-bottom: 40px;
+}
+.col-btn{
+    display: flex;
+    justify-content: center;
+}
+.btn-parcelas{
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    margin-top: 25px !important;
+    background-color: #1BA1E2;
+}
+#div-baseC{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.foo-btn{
+    display: flex !important;
+    justify-content: end;
+    flex-direction: initial;
+}
+.foo-btns{
+    display: flex !important;
+    justify-content: space-between;
+}
+.panel-default{
+    border-radius: 10px;
+    width: 100% !important;
+}
+.col-parcelas{
+    display: flex;
+    flex-direction: column-reverse;
+    padding-bottom: 40px;
+}
+.fluig-style-guide .panel>.panel-body {
+    padding: 40px 24px !important;
+}
+.imgs{
+    width: 6%;
+}
+.div-check{
+    display: flex;
+    justify-content: center;
+    height: 59px;
+    align-items: end;
+}
+.new-panel{
+    border: 1px solid #46C243 !important;
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%) !important;
+    border-radius: 8px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    color: #46C243 !important;
+    font-size: 1.4rem !important;
+}
+/* .col-md-12{
+    width: 100%;
+} */
+.btn-recalcular{
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    background-color: #FA6800;
+    margin-right: 20px !important;
+}
+#title_etapa{
+    text-align: center;
+}
+.title{
+    color: #46C243 !important;
+    display: none;
+}
+.progress{
+    box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+}
+.spn_etapa{
+    font-weight: 500;
+}
+#img_calcula{
+    width: 40px;
+}
+#txta_parcelas_obs{
+    height: 300px !important;
+}
+#txta_aprovacao_obs{
+    height: 200px !important;
+}
+#txta_impostos_obs{
+    height: 200px !important;
+}
+.col-titulo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+/* .fluig-style-guide .fluig-filter .bootstrap-tagsinput {
+    border-radius: 0px;
+}
+.select2-container--default .select2-selection--multiple {
+    border-radius: 0px !important;
+} */
+.btn-sim{
+    background-color: #008A00;
+    text-align: center;
+    padding: 15px 30px !important;
+    width: 116px;
+    margin-right: 15px !important;
+}
+.btn-revisao{
+    background-color: #FF9933;
+    text-align: center;
+    padding: 15px 30px !important;
+    width: 117px;
+    margin-left: 15px !important;
+}
+.btn-revisao-cont{
+    background-color: #CB3D3D;
+    text-align: center;
+    padding: 15px 30px !important;
+    width: 117px;
+}
+.input-obs{
+    height: 50px !important;
+}
+.col-btn-aprov{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.btn{
+    cursor: pointer !important;
+}
+.switch{
+    cursor: pointer !important;
+}
+.targa{
+    padding: 20;
+    text-align: center;
+    border-radius: 10px;
+}
+.td-table{
+    width: 400px !important;
+}
+#fundo-alert{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background-color: #A9A9A9;
+    opacity: 40%;
+}
+#fundo-alert-2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+}
+#divloading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(255,255,255,0.8);
+}
+#loading{
+    width: 50vh;
+}
+#div-alert{
+    margin-bottom: 145px;
+}
+#btn-dateVenct{
+    cursor: pointer;
+    width: 41px;
+}
+#btn-dataVenctP{
+    cursor: pointer;
+    width: 41px;
+}
+#btn-dateEmissao{
+    cursor: pointer;
+    width: 41px;
+}
+#btn-dateEntrada{
+    cursor: pointer;
+    width: 41px;
+}
+#div-date{
+    display: flex;
+}
+#div-date-entrada{
+    display: flex;
+}
+#div-dateVenct{
+    display: flex;
+}
+#div-dateVenctP{
+    display: flex;
+}
+/* txt_dadosnf_dataemissao */
+#txt_parcelas_vencimentoinicial{
+    border-radius: 0px 4px 4px 0px !important;
+}
+/* #txt_dadosnf_dataemissao{
+    border-radius: 0px 4px 4px 0px !important;
+} */
+
+.panel-title h2{
+    font-size: 4vh !important;
+}
